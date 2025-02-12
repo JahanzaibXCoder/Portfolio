@@ -9,34 +9,38 @@ const Header = () => {
   const pathname = usePathname()
   const { theme, toggleTheme } = useTheme()
 
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Projects", path: "/projects" },
+    { name: "Blog", path: "/blog" },
+    { name: "Contact", path: "/contact" },
+  ]
+
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="bg-white dark:bg-gray-800 text-gray-800 dark:text-white py-4 shadow-md"
+      className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white py-4 shadow-md"
     >
       <nav className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
         <Link href="/" className="text-2xl font-bold mb-4 sm:mb-0">
-          Senior Dev
+          Jahanzaib Sohail
+          {pathname !== "/" && (
+            <span className="font-normal text-gray-600 dark:text-gray-400">/{pathname.slice(1)}</span>
+          )}
         </Link>
         <ul className="flex space-x-4">
-          {pathname !== "/" && (
-            <li>
-              <Link href="/">Home</Link>
-            </li>
+          {navItems.map(
+            (item) =>
+              pathname !== item.path && (
+                <li key={item.path}>
+                  <Link href={item.path} className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                    {item.name}
+                  </Link>
+                </li>
+              ),
           )}
-          {pathname !== "/projects" && (
-            <li>
-              <Link href="/projects">Projects</Link>
-            </li>
-          )}
-          <li>
-            <Link href="/blog">Blog</Link>
-          </li>
-          <li>
-            <Link href="/contact">Contact</Link>
-          </li>
         </ul>
         <button
           onClick={toggleTheme}

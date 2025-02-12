@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { Points, PointMaterial } from "@react-three/drei"
+import { useTheme } from "../providers/ThemeProvider"
 import type * as THREE from "three"
 
 interface ParticleProps {
@@ -10,7 +11,6 @@ interface ParticleProps {
   shape?: "envelope" | "code" | "rocket" | "brain"
   mouseFollow?: boolean
   scrollDisperse?: boolean
-  theme?: "light" | "dark"
 }
 
 const shapes = {
@@ -63,19 +63,14 @@ const shapes = {
   ],
 }
 
-function ParticleCloud({
-  count = 5000,
-  shape = "envelope",
-  mouseFollow = true,
-  scrollDisperse = true,
-  theme = "light",
-}: ParticleProps) {
+function ParticleCloud({ count = 5000, shape = "envelope", mouseFollow = true, scrollDisperse = true }: ParticleProps) {
   const points = useRef<THREE.Points>(null)
   const { size, viewport } = useThree()
   const mouse = useRef([0, 0])
   const scroll = useRef(0)
   const targetPositions = useRef<Float32Array>()
   const originalPositions = useRef<Float32Array>()
+  const { theme } = useTheme()
 
   const [positions, setPositions] = useState<Float32Array | null>(null)
 
@@ -170,10 +165,12 @@ function ParticleCloud({
   )
 }
 
-export default function ParticleSystem({ shape, mouseFollow, scrollDisperse, theme = "light" }: ParticleProps) {
+export default function ParticleSystem({ shape, mouseFollow, scrollDisperse }: ParticleProps) {
+  const { theme } = useTheme()
+
   return (
     <Canvas camera={{ position: [0, 0, 2], fov: 50 }}>
-      <ParticleCloud shape={shape} mouseFollow={mouseFollow} scrollDisperse={scrollDisperse} theme={theme} />
+      <ParticleCloud shape={shape} mouseFollow={mouseFollow} scrollDisperse={scrollDisperse} />
     </Canvas>
   )
 }
